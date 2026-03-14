@@ -6,6 +6,8 @@ import 'features/auth/data/mock_auth_repository.dart';
 import 'features/auth/presentation/login_screen.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/dashboard/presentation/dashboard_screen.dart';
+import 'features/transactions/data/mock_transaction_repository.dart';
+import 'features/transactions/providers/transaction_provider.dart';
 // import 'firebase_options.dart'; // Uncomment this once generated
 
 Future<void> main() async {
@@ -20,6 +22,9 @@ Future<void> main() async {
     ProviderScope(
       overrides: [
         authRepositoryProvider.overrideWithValue(MockAuthRepository()),
+        transactionRepositoryProvider.overrideWithValue(
+          MockTransactionRepository(),
+        ),
       ],
       child: MyApp(),
     ),
