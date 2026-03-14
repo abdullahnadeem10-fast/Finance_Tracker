@@ -1,8 +1,15 @@
-import 'package:flutter/material.dart';
 import 'dart:ui';
-import '../constants/app_colors.dart';
+import 'package:flutter/material.dart';
 
 class GlassContainer extends StatelessWidget {
+  final Widget child;
+  final double blur;
+  final double opacity;
+  final double borderRadius;
+  final EdgeInsetsGeometry padding;
+  final double? width;
+  final double? height;
+
   const GlassContainer({
     super.key,
     required this.child,
@@ -10,19 +17,9 @@ class GlassContainer extends StatelessWidget {
     this.opacity = 0.1,
     this.borderRadius = 20.0,
     this.padding = const EdgeInsets.all(16.0),
-    this.borderOpacity = 0.2,
     this.width,
     this.height,
   });
-
-  final Widget child;
-  final double blur;
-  final double opacity;
-  final double borderRadius;
-  final EdgeInsetsGeometry padding;
-  final double borderOpacity;
-  final double? width;
-  final double? height;
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +30,10 @@ class GlassContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.4),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 20,
+            spreadRadius: 2,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -46,20 +44,19 @@ class GlassContainer extends StatelessWidget {
           child: Container(
             padding: padding,
             decoration: BoxDecoration(
-              color: Colors.white.withAlpha((opacity * 255).toInt()),
-              // Subtle Gloss Highlight Gradient
+              color: Colors.white.withOpacity(opacity),
+              borderRadius: BorderRadius.circular(borderRadius),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.2),
+                width: 1.0,
+              ),
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Colors.white.withAlpha(((opacity + 0.05) * 255).toInt()),
-                  Colors.white.withAlpha(((opacity - 0.02) * 255).toInt()),
+                  Colors.white.withOpacity(0.15),
+                  Colors.white.withOpacity(0.05),
                 ],
-              ),
-              borderRadius: BorderRadius.circular(borderRadius),
-              border: Border.all(
-                color: Colors.white.withAlpha((borderOpacity * 255).toInt()),
-                width: 1.5,
               ),
             ),
             child: child,
