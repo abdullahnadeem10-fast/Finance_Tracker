@@ -7,6 +7,7 @@ abstract class TransactionRepository {
   Future<void> addTransaction(String userId, TransactionModel transaction);
   Future<void> deleteTransaction(String userId, String transactionId);
   Future<double> calculateTotalBalance(String userId);
+  Future<void> resetData();
 }
 
 class FirebaseTransactionRepository implements TransactionRepository {
@@ -71,5 +72,10 @@ class FirebaseTransactionRepository implements TransactionRepository {
     }
 
     return total;
+  }
+
+  @override
+  Future<void> resetData() async {
+    return;
   }
 }

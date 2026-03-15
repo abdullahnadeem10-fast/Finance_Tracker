@@ -1,14 +1,20 @@
-// ignore_for_file: avoid_print
+import 'dart:async';
 
 import '../domain/transaction_model.dart';
 import 'transaction_repository.dart';
 
 class MockTransactionRepository implements TransactionRepository {
-  @override
-  Stream<List<TransactionModel>> getTransactions(String userId) {
-    final now = DateTime.now();
+  MockTransactionRepository()
+    : _controller = StreamController<List<TransactionModel>>.broadcast() {
+    _transactions = _buildDefaultTransactions();
+  }
 
-    final transactions = <TransactionModel>[
+  final StreamController<List<TransactionModel>> _controller;
+  late List<TransactionModel> _transactions;
+
+  List<TransactionModel> _buildDefaultTransactions() {
+    final now = DateTime.now();
+    return [
       TransactionModel(
         id: 'txn-1',
         amount: 8.75,
@@ -23,7 +29,7 @@ class MockTransactionRepository implements TransactionRepository {
         type: 'expense',
         category: 'Transport',
         title: 'Uber',
-        date: DateTime.now().subtract(const Duration(days: 1)),
+        date: now.subtract(const Duration(days: 1)),
       ),
       TransactionModel(
         id: 'txn-3',
@@ -31,7 +37,7 @@ class MockTransactionRepository implements TransactionRepository {
         type: 'income',
         category: 'Income',
         title: 'Salary',
-        date: DateTime.now().subtract(const Duration(hours: 3)),
+        date: now.subtract(const Duration(hours: 3)),
       ),
       TransactionModel(
         id: 'txn-4',
@@ -39,7 +45,7 @@ class MockTransactionRepository implements TransactionRepository {
         type: 'expense',
         category: 'Subscriptions',
         title: 'Netflix',
-        date: DateTime.now().subtract(const Duration(days: 2)),
+        date: now.subtract(const Duration(days: 2)),
       ),
       TransactionModel(
         id: 'txn-5',
@@ -47,7 +53,7 @@ class MockTransactionRepository implements TransactionRepository {
         type: 'expense',
         category: 'Groceries',
         title: 'Grocery',
-        date: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
+        date: now.subtract(const Duration(days: 1, hours: 2)),
       ),
       TransactionModel(
         id: 'txn-6',
@@ -55,36 +61,46 @@ class MockTransactionRepository implements TransactionRepository {
         type: 'expense',
         category: 'Coffee',
         title: 'Starbucks',
-        date: DateTime.now().subtract(const Duration(days: 3)),
+        date: now.subtract(const Duration(days: 3)),
       ),
     ];
+  }
 
-    return Stream.value(transactions);
+  @override
+  Stream<List<TransactionModel>> getTransactions(String userId) async* {
+    yield List<TransactionModel>.from(_transactions);
+    yield* _controller.stream;
   }
 
   @override
   Future<void> addTransaction(String userId, TransactionModel transaction) async {
-    print('Added Mock Transaction');
+    _transactions.add(transaction);
+    _controller.add(List.from(_transactions));
   }
 
   @override
   Future<void> deleteTransaction(String userId, String transactionId) async {
-    print('Deleted Mock Transaction');
+    _transactions.removeWhere((transaction) => transaction.id == transactionId);
+    _controller.add(List.from(_transactions));
   }
 
   @override
   Future<double> calculateTotalBalance(String userId) async {
-    final transactions = await getTransactions(userId).first;
-
     double total = 0;
-    for (final transaction in transactions) {
+    for (final transaction in _transactions) {
       if (transaction.type == 'income') {
         total += transaction.amount;
-      } else {
+      } else if (transaction.type == 'expense') {
         total -= transaction.amount;
       }
     }
 
     return total;
+  }
+
+  @override
+  Future<void> resetData() async {
+    _transactions = _buildDefaultTransactions();
+    _controller.add(List<TransactionModel>.from(_transactions));
   }
 }

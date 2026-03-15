@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/glass_container.dart';
 import '../../auth/providers/auth_provider.dart';
+import '../../settings/presentation/settings_screen.dart';
+import '../../transactions/presentation/add_transaction_screen.dart';
 import '../../transactions/providers/transaction_provider.dart';
 import 'widgets/spending_chart.dart';
 import 'widgets/transaction_item.dart';
@@ -19,6 +22,36 @@ class DashboardScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SettingsScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.settings),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddTransactionScreen(),
+            ),
+          );
+        },
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.black,
+        child: const Icon(Icons.add),
+      ),
       body: SafeArea(
         child: transactionsAsync.when(
           data: (transactions) {
