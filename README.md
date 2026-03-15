@@ -1,17 +1,60 @@
-# demo_app
+# LuxeVault - High-Performance Finance Tracker
 
-A new Flutter project.
+LuxeVault is a high-performance, modern finance tracker engineered for speed, clarity, and reliability, featuring real-time data synchronization, secure biometric authentication, and a premium analytics-driven user experience.
+
+## Screenshots
+
+![Dashboard](path/to/dashboard_image)
+![Add Transaction](path/to/add_transaction_image)
+
+## PRD / Architecture Diagram
+
+```mermaid
+graph TD
+	 A[User] --> B[Auth Layer<br/>Firebase Auth + Biometric]
+	 B --> C[Dashboard<br/>Riverpod Providers]
+	 C --> D[Transaction Repository<br/>Firestore / Mock Source]
+	 D --> E[UI Updates<br/>Reactive Widgets]
+
+	 C --> F[fl_chart<br/>Real-time Analytics]
+	 E --> G[Glassmorphism UI<br/>Cyberpunk/Dark Components]
+
+	 D --> H[Cloud Sync<br/>Firebase Firestore]
+	 H --> C
+```
+
+## Tech Stack
+
+- Flutter
+- Dart
+- Riverpod
+- Firebase
+- Fl_chart
+- Glassmorphism UI
+
+## Features
+
+- Real-time Analytics
+- Cyberpunk/Dark UI
+- Secure Auth
+- Cloud Sync
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. Install dependencies:
 
-A few resources to get you started if this is your first Flutter project:
+	```bash
+	flutter pub get
+	```
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+2. Configure Firebase for your local environment:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+	```bash
+	flutterfire configure
+	```
+
+3. Run the app:
+
+	```bash
+	flutter run
+	```
